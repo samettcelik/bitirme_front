@@ -1,72 +1,159 @@
-import React, { useState } from "react";
-import { HomeIcon, ChartBarIcon, CogIcon, LogoutIcon } from "@heroicons/react/solid";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+  HomeIcon,
+  ChartBarIcon,
+  CogIcon,
+  LogOutIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  UserIcon,
+  FilePenIcon,
+  MessagesSquareIcon
+} from 'lucide-react';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
+  // Menü öğeleri
   const menuItems = [
-    { name: "Ev", icon: HomeIcon, path: "/" },
-    { name: "Pratiklerim", icon: ChartBarIcon, path: "/pratiklerim" },
-    { name: "Mülakatlarım", icon: CogIcon, path: "/mulakatlarim" },
-    { name: "Pratik Oluştur", icon: ChartBarIcon, path: "/pratik-olustur" },
-    { name: "Profil Ayarları", icon: CogIcon, path: "/profil-ayarlari" },
+    {
+      name: "Ev",
+      icon: HomeIcon,
+      path: "/"
+    },
+    {
+      name: "Pratiklerim",
+      icon: ChartBarIcon,
+      path: "/pratiklerim"
+    },
+    {
+      name: "Mülakatlarım",
+      icon: MessagesSquareIcon,
+      path: "/mulakatlarim"
+    },
+    {
+      name: "Pratik Oluştur",
+      icon: FilePenIcon,
+      path: "/pratik-olustur"
+    },
+    {
+      name: "Profil Ayarları",
+      icon: CogIcon,
+      path: "/profil-ayarlari"
+    }
   ];
+
+  // Kullanıcı verilerini çek
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        const response = await axios.get('http://localhost:3000/api/auth/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Kullanıcı bilgileri alınamadı:', error);
+        if (error.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+  // Çıkış işlemi
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <div
-      className={`${
-        isExpanded ? "w-72" : "w-20"
-      } h-screen bg-sidebar-radial text-gray-300 transition-all duration-300 relative`}
+      className={`
+        fixed left-8 top-8 bottom-8
+        ${isExpanded ? 'w-72' : 'w-20'}
+        bg-gradient-to-b from-purple-700 to-purple-900
+        rounded-3xl
+        transition-all duration-300
+        shadow-xl
+        flex flex-col
+        text-white
+        z-50
+      `}
     >
-      {/* Toggle Button */}
+      {/* Genişlet/Daralt Butonu */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="absolute -right-3 top-10 bg-[#013309] rounded-full p-1 z-10"
+        className="absolute -right-3 top-8 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors"
       >
-        <ChartBarIcon className="w-4 h-4 text-gray-300" />
+        {isExpanded ? (
+          <ChevronLeftIcon className="w-4 h-4 text-purple-700" />
+        ) : (
+          <ChevronRightIcon className="w-4 h-4 text-purple-700" />
+        )}
       </button>
 
-      {/* Header Section */}
+      {/* Başlık ve Kullanıcı Bilgileri */}
       <div className="p-6">
-        {/* Logo */}
-        <div className="text-2xl font-bold text-white mb-6 text-center">
+        <div className="text-2xl font-bold mb-6 text-center">
           {isExpanded ? "TRACK AI" : "TA"}
         </div>
-        {/* Profile Section */}
-        {isExpanded && (
+
+        {isExpanded && userData && (
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full bg-gray-600 mb-3"></div>
-            <h2 className="text-white font-medium mb-1">Samet Çelik</h2>
-            <span className="text-xs px-3 py-1 bg-[#000000] rounded-full">
+            <div className="w-16 h-16 rounded-full bg-white/20 mb-3 flex items-center justify-center">
+              <UserIcon className="w-8 h-8 text-white/60" />
+            </div>
+            <h2 className="font-medium mb-1">{userData.username || 'Kullanıcı'}</h2>
+            <span className="text-xs px-3 py-1 bg-purple-500/50 rounded-full">
               USER
             </span>
           </div>
         )}
       </div>
 
-      {/* Navigation */}
-      <nav className="mt-8">
+      {/* Ana Menü */}
+      <nav className="flex-1 px-4">
         <ul className="space-y-2">
           {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className="flex items-center px-6 py-3 cursor-pointer group"
-            >
-              {/* Menü Öğesi Bağlantısı */}
+            <li key={index}>
               <Link
                 to={item.path}
-                className="flex items-center w-full text-gray-300 hover:text-[#32CD32] group"
+                className={`
+                  flex items-center
+                  px-4 py-3
+                  rounded-xl
+                  hover:bg-white/10
+                  transition-colors
+                  group
+                  ${window.location.pathname === item.path ? 'bg-white/10' : ''}
+                `}
               >
-                {/* İkon */}
-                <item.icon
-                  className={`w-5 h-5 opacity-75 ${
-                    !isExpanded && "mx-auto"
-                  } group-hover:text-[#32CD32]`}
+                <item.icon 
+                  className={`
+                    w-5 h-5
+                    ${!isExpanded && 'mx-auto'}
+                    group-hover:scale-110
+                    transition-transform
+                  `}
                 />
-                {/* Menü İsmi */}
                 {isExpanded && (
-                  <span className="ml-3">{item.name}</span>
+                  <span className="ml-3 text-sm">{item.name}</span>
                 )}
               </Link>
             </li>
@@ -74,18 +161,29 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      {/* Logout */}
-      <div className="absolute bottom-4 w-full px-6">
-        <div className="flex items-center py-3 cursor-pointer group">
-          <LogoutIcon
-            className={`w-5 h-5 opacity-75 ${
-              !isExpanded && "mx-auto"
-            } group-hover:text-[#32CD32]`}
+      {/* Çıkış Butonu */}
+      <div className="p-4">
+        <button
+          onClick={handleLogout}
+          className="
+            flex items-center
+            w-full px-4 py-3
+            rounded-xl
+            hover:bg-white/10
+            transition-colors
+            group
+          "
+        >
+          <LogOutIcon 
+            className={`
+              w-5 h-5
+              ${!isExpanded && 'mx-auto'}
+              group-hover:scale-110
+              transition-transform
+            `}
           />
-          {isExpanded && (
-            <span className="ml-3 group-hover:text-[#32CD32]">Log out</span>
-          )}
-        </div>
+          {isExpanded && <span className="ml-3 text-sm">Çıkış Yap</span>}
+        </button>
       </div>
     </div>
   );

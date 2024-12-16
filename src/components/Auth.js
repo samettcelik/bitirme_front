@@ -2,8 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// API URL'ini tanımlayalım
 const API_URL = 'http://localhost:3000/api/auth';
+
+// Wave Background Component
+const WaveBackground = () => (
+  <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800">
+    {/* Primary Wave */}
+    <div className="absolute w-full h-full overflow-hidden">
+      <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/2">
+        <svg viewBox="0 0 1440 320" className="w-full">
+          <path 
+            fill="rgba(255, 255, 255, 0.15)" 
+            d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            <animate 
+              attributeName="d" 
+              dur="10s" 
+              repeatCount="indefinite"
+              values="
+                M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
+                M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,181.3C672,192,768,160,864,144C960,128,1056,128,1152,138.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
+                M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            />
+          </path>
+        </svg>
+      </div>
+    </div>
+    {/* Secondary Wave */}
+    <div className="absolute w-full h-full overflow-hidden">
+      <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/3">
+        <svg viewBox="0 0 1440 320" className="w-full">
+          <path 
+            fill="rgba(255, 255, 255, 0.1)" 
+            d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            <animate 
+              attributeName="d" 
+              dur="15s" 
+              repeatCount="indefinite"
+              values="
+                M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
+                M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,160C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
+                M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            />
+          </path>
+        </svg>
+      </div>
+    </div>
+  </div>
+);
 
 // Login Component
 const Login = () => {
@@ -33,11 +78,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post(`${API_URL}/login`, {
-        email: formData.email,
-        password: formData.password
-      });
-
+      const response = await axios.post(`${API_URL}/login`, formData);
       const { token } = response.data;
       localStorage.setItem('token', token);
       navigate('/');
@@ -47,58 +88,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-r from-green-600 to-green-700">
-      {/* Animated circle patterns */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Top left nested circles */}
-        <div className="absolute -top-10 -left-10">
-          <div className="w-64 h-64 border border-black/20 rounded-full animate-glow-1"></div>
-          <div className="absolute left-10 top-10 w-48 h-48 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute left-20 top-20 w-32 h-32 border border-black/20 rounded-full animate-glow-3"></div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <WaveBackground />
 
-        {/* Top right nested circles */}
-        <div className="absolute -top-20 right-20">
-          <div className="w-80 h-80 border border-black/20 rounded-full animate-glow-random"></div>
-          <div className="absolute right-10 top-10 w-60 h-60 border border-black/20 rounded-full animate-glow-random-2"></div>
-        </div>
-
-        {/* Center pattern */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="w-96 h-96 border border-black/20 rounded-full animate-glow-1"></div>
-          <div className="absolute left-1/2 top-1/2 w-72 h-72 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute left-1/2 top-1/2 w-48 h-48 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-3"></div>
-          <div className="absolute left-1/2 top-1/2 w-24 h-24 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-4"></div>
-        </div>
-
-        {/* Bottom left nested circles */}
-        <div className="absolute bottom-10 left-20">
-          <div className="w-56 h-56 border border-black/20 rounded-full animate-glow-random-3"></div>
-          <div className="absolute left-8 top-8 w-40 h-40 border border-black/20 rounded-full animate-glow-random-4"></div>
-          <div className="absolute left-16 top-16 w-24 h-24 border border-black/20 rounded-full animate-glow-1"></div>
-        </div>
-
-        {/* Bottom right nested circles */}
-        <div className="absolute -bottom-20 -right-20">
-          <div className="w-72 h-72 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute right-12 bottom-12 w-48 h-48 border border-black/20 rounded-full animate-glow-3"></div>
-          <div className="absolute right-24 bottom-24 w-24 h-24 border border-black/20 rounded-full animate-glow-4"></div>
-        </div>
-
-        {/* Additional floating circles */}
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 border border-black/20 rounded-full animate-glow-random"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 border border-black/20 rounded-full animate-glow-random-2"></div>
-      </div>
-
-      {/* White Card */}
-      <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10">
+      <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10 backdrop-blur-lg bg-opacity-95">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">TRACK AI</h1>
           <p className="text-gray-600 mt-2">Hesabınıza giriş yapın</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-4 text-sm text-red-600 bg-red-100 rounded-lg">
+          <div className="mb-4 p-4 text-sm text-red-600 bg-red-50 rounded-lg">
             {error}
           </div>
         )}
@@ -114,7 +114,7 @@ const Login = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="ornek@email.com"
             />
           </div>
@@ -129,23 +129,23 @@ const Login = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="********"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 px-4 text-white text-lg font-bold rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg"
+            className="w-full py-3 px-4 text-white text-lg font-bold rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg"
           >
             Giriş Yap
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <button 
+          <button
             onClick={() => navigate('/forgot-password')}
-            className="text-sm text-gray-600 hover:text-green-600 transition-colors"
+            className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
           >
             Şifremi Unuttum
           </button>
@@ -156,7 +156,7 @@ const Login = () => {
             Hesabınız yok mu?{' '}
             <button
               onClick={() => navigate('/register')}
-              className="font-medium text-green-600 hover:text-green-700 transition-colors"
+              className="font-medium text-purple-600 hover:text-purple-700 transition-colors"
             >
               Kayıt Ol
             </button>
@@ -166,6 +166,8 @@ const Login = () => {
     </div>
   );
 };
+
+// Register Component
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -202,81 +204,42 @@ const Register = () => {
     }
 
     try {
-      // Kayıt işlemi
       await axios.post(`${API_URL}/register`, {
         username: formData.username,
         email: formData.email,
         password: formData.password
       });
 
-      // Başarılı kayıt mesajı
       setSuccess('Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...');
 
-      // 2 saniye sonra login sayfasına yönlendir
       setTimeout(() => {
         navigate('/login');
       }, 2000);
 
     } catch (err) {
-      console.error('Register error:', err);
       setError(err.response?.data?.message || 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-gradient-to-r from-green-600 to-green-700">
-      {/* Animated circle patterns - same as Login component */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Top left nested circles */}
-        <div className="absolute -top-10 -left-10">
-          <div className="w-64 h-64 border border-black/20 rounded-full animate-glow-1"></div>
-          <div className="absolute left-10 top-10 w-48 h-48 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute left-20 top-20 w-32 h-32 border border-black/20 rounded-full animate-glow-3"></div>
-        </div>
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <WaveBackground />
 
-        {/* Top right nested circles */}
-        <div className="absolute -top-20 right-20">
-          <div className="w-80 h-80 border border-black/20 rounded-full animate-glow-random"></div>
-          <div className="absolute right-10 top-10 w-60 h-60 border border-black/20 rounded-full animate-glow-random-2"></div>
-        </div>
-
-        {/* Center pattern */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="w-96 h-96 border border-black/20 rounded-full animate-glow-1"></div>
-          <div className="absolute left-1/2 top-1/2 w-72 h-72 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute left-1/2 top-1/2 w-48 h-48 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-3"></div>
-          <div className="absolute left-1/2 top-1/2 w-24 h-24 -translate-x-1/2 -translate-y-1/2 border border-black/20 rounded-full animate-glow-4"></div>
-        </div>
-
-        {/* Bottom left nested circles */}
-        <div className="absolute bottom-10 left-20">
-          <div className="w-56 h-56 border border-black/20 rounded-full animate-glow-random-3"></div>
-          <div className="absolute left-8 top-8 w-40 h-40 border border-black/20 rounded-full animate-glow-random-4"></div>
-          <div className="absolute left-16 top-16 w-24 h-24 border border-black/20 rounded-full animate-glow-1"></div>
-        </div>
-
-        {/* Bottom right nested circles */}
-        <div className="absolute -bottom-20 -right-20">
-          <div className="w-72 h-72 border border-black/20 rounded-full animate-glow-2"></div>
-          <div className="absolute right-12 bottom-12 w-48 h-48 border border-black/20 rounded-full animate-glow-3"></div>
-          <div className="absolute right-24 bottom-24 w-24 h-24 border border-black/20 rounded-full animate-glow-4"></div>
-        </div>
-
-        {/* Additional floating circles */}
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 border border-black/20 rounded-full animate-glow-random"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 border border-black/20 rounded-full animate-glow-random-2"></div>
-      </div>
-
-      {/* White Card */}
-      <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10">
+      <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10 backdrop-blur-lg bg-opacity-95">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">TRACK AI</h1>
           <p className="text-gray-600 mt-2">Yeni hesap oluşturun</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-4 text-sm text-red-600 bg-red-100 rounded-lg">
+          <div className="mb-4 p-4 text-sm text-red-600 bg-red-50 rounded-lg">
             {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-4 text-sm text-green-600 bg-green-50 rounded-lg">
+            {success}
           </div>
         )}
 
@@ -291,7 +254,7 @@ const Register = () => {
               required
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="kullaniciadi"
             />
           </div>
@@ -306,7 +269,7 @@ const Register = () => {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="ornek@email.com"
             />
           </div>
@@ -321,7 +284,7 @@ const Register = () => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="********"
             />
           </div>
@@ -336,14 +299,14 @@ const Register = () => {
               required
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="********"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 px-4 text-white text-lg font-bold rounded-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg"
+            className="w-full py-3 px-4 text-white text-lg font-bold rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg"
           >
             Kayıt Ol
           </button>
@@ -354,7 +317,7 @@ const Register = () => {
             Zaten hesabınız var mı?{' '}
             <button
               onClick={() => navigate('/login')}
-              className="font-medium text-green-600 hover:text-green-700 transition-colors"
+              className="font-medium text-purple-600 hover:text-purple-700 transition-colors"
             >
               Giriş Yap
             </button>

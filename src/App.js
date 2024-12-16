@@ -16,6 +16,7 @@ import ProfilAyarları from "./components/ProfilAyarlari";
 import QuestionView from './components/QuestionView';
 import EmotionAnalysisSystem from './components/EmotionAnalysisSystem';
 import { Login, Register } from './components/Auth';
+import PratikDetay from './components/PratikDetay';
 
 // AuthCheck component to handle initial auth state
 const AuthCheck = ({ children }) => {
@@ -24,11 +25,9 @@ const AuthCheck = ({ children }) => {
   const isAuthenticated = localStorage.getItem('token');
 
   useEffect(() => {
-    // If user is not authenticated and not on auth pages, redirect to login
     if (!isAuthenticated && !location.pathname.includes('/login') && !location.pathname.includes('/register')) {
       navigate('/login', { replace: true });
     }
-    // If user is authenticated and on auth pages, redirect to dashboard
     else if (isAuthenticated && (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/')) {
       navigate('/dashboard', { replace: true });
     }
@@ -40,22 +39,23 @@ const AuthCheck = ({ children }) => {
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('token');
-  
+  const location = useLocation();
+
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  
+
   return children;
 };
 
 // Public Route wrapper component
 const PublicRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('token');
-  
+
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   return children;
 };
 
@@ -76,13 +76,11 @@ const App = () => {
     <Router>
       <AuthCheck>
         <Routes>
-          {/* Root route will check auth state and redirect accordingly */}
-          <Route 
-            path="/" 
-            element={<Navigate to="/login" replace />} 
-          />
-
           {/* Public Routes */}
+          <Route
+            path="/"
+            element={<Navigate to="/login" replace />}
+          />
           <Route
             path="/login"
             element={
@@ -123,6 +121,19 @@ const App = () => {
             }
           />
 
+          {/* Yeni eklenen Pratik Detay route'u */}
+          <Route
+            path="/pratikler/:id"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <PratikDetay />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
+
+
           <Route
             path="/mulakatlarim"
             element={
@@ -156,6 +167,7 @@ const App = () => {
             }
           />
 
+          {/* Question Routes */}
           <Route
             path="/question-view/:questionNumber"
             element={
@@ -178,8 +190,17 @@ const App = () => {
             }
           />
 
-          {/* Catch-all route for unmatched paths */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          {/* Fallback route */}
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <AuthenticatedLayout>
+                  <Navigate to="/dashboard" replace />
+                </AuthenticatedLayout>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthCheck>
     </Router>
