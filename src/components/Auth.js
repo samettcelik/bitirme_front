@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/api/auth';
@@ -18,10 +18,7 @@ const WaveBackground = () => (
               attributeName="d" 
               dur="10s" 
               repeatCount="indefinite"
-              values="
-                M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,181.3C672,192,768,160,864,144C960,128,1056,128,1152,138.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              values="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,181.3C672,192,768,160,864,144C960,128,1056,128,1152,138.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
             />
           </path>
         </svg>
@@ -38,10 +35,7 @@ const WaveBackground = () => (
               attributeName="d" 
               dur="15s" 
               repeatCount="indefinite"
-              values="
-                M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,160C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              values="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,160C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
             />
           </path>
         </svg>
@@ -49,22 +43,73 @@ const WaveBackground = () => (
     </div>
   </div>
 );
+export const LoginSelection = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectUrl = searchParams.get('redirect');
+
+  // Don't show redirect message for interview URLs
+  const showRedirectMessage = redirectUrl && !redirectUrl.startsWith('/interview');
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <WaveBackground />
+      
+      <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10 backdrop-blur-lg bg-opacity-95">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">TRACK AI</h1>
+          <p className="text-gray-600 mt-2">Hesap türünüzü seçin</p>
+          {showRedirectMessage && (
+            <p className="text-sm text-purple-600 mt-2">
+              Bu sayfaya erişmek için önce giriş yapmalısınız
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          <button
+            onClick={() => navigate(`/user-login${redirectUrl && !redirectUrl.startsWith('/interview') ? `?redirect=${redirectUrl}` : ''}`)}
+            className="w-full py-4 px-6 text-white text-lg font-bold rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg"
+          >
+            Kullanıcı Girişi
+          </button>
+
+          <button
+            onClick={() => navigate('/company-login')}
+            className="w-full py-4 px-6 text-gray-700 text-lg font-bold rounded-lg border-2 border-purple-600 hover:bg-purple-50 transition-all duration-300"
+          >
+            Şirket Girişi
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 // Login Component
-const Login = () => {
+export const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
 
+  const searchParams = new URLSearchParams(location.search);
+  const redirectUrl = searchParams.get('redirect');
+  
+  // Don't redirect to interview URLs after login
+  const finalRedirectUrl = redirectUrl && !redirectUrl.startsWith('/interview') ? redirectUrl : '/dashboard';
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      navigate('/');
+      navigate(finalRedirectUrl);
     }
-  }, [navigate]);
+  }, [navigate, finalRedirectUrl]);
 
   const handleChange = (e) => {
     setFormData({
@@ -79,9 +124,13 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${API_URL}/login`, formData);
-      const { token } = response.data;
+      const { token, userId, username } = response.data;
+      
       localStorage.setItem('token', token);
-      navigate('/');
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('username', username);
+
+      navigate(finalRedirectUrl);
     } catch (err) {
       setError(err.response?.data?.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
     }
@@ -95,6 +144,11 @@ const Login = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">TRACK AI</h1>
           <p className="text-gray-600 mt-2">Hesabınıza giriş yapın</p>
+          {redirectUrl && (
+            <p className="text-sm text-purple-600 mt-2">
+              Mülakat sayfasına erişmek için giriş yapmanız gerekiyor
+            </p>
+          )}
         </div>
 
         {error && (
@@ -155,7 +209,7 @@ const Login = () => {
           <p className="text-sm text-gray-600">
             Hesabınız yok mu?{' '}
             <button
-              onClick={() => navigate('/register')}
+              onClick={() => navigate(`/register${redirectUrl ? `?redirect=${redirectUrl}` : ''}`)}
               className="font-medium text-purple-600 hover:text-purple-700 transition-colors"
             >
               Kayıt Ol
@@ -168,8 +222,9 @@ const Login = () => {
 };
 
 // Register Component
-const Register = () => {
+export const Register = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -179,13 +234,20 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const searchParams = new URLSearchParams(location.search);
+  const redirectUrl = searchParams.get('redirect');
+  
+  // Don't redirect to interview URLs after registration
+  const finalRedirectUrl = redirectUrl && !redirectUrl.startsWith('/interview') ? redirectUrl : '/dashboard';
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      navigate('/dashboard');
+      navigate(finalRedirectUrl);
     }
-  }, [navigate]);
+  }, [navigate, finalRedirectUrl]);
 
+  // Rest of the Register component logic remains the same
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -203,6 +265,11 @@ const Register = () => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError('Şifre en az 6 karakter olmalıdır');
+      return;
+    }
+
     try {
       await axios.post(`${API_URL}/register`, {
         username: formData.username,
@@ -213,13 +280,14 @@ const Register = () => {
       setSuccess('Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...');
 
       setTimeout(() => {
-        navigate('/login');
+        navigate(`/user-login${redirectUrl && !redirectUrl.startsWith('/interview') ? `?redirect=${redirectUrl}` : ''}`);
       }, 2000);
 
     } catch (err) {
       setError(err.response?.data?.message || 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.');
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
@@ -229,6 +297,11 @@ const Register = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">TRACK AI</h1>
           <p className="text-gray-600 mt-2">Yeni hesap oluşturun</p>
+          {redirectUrl && (
+            <p className="text-sm text-purple-600 mt-2">
+              Mülakat sayfasına erişmek için hesap oluşturmanız gerekiyor
+            </p>
+          )}
         </div>
 
         {error && (
@@ -282,11 +355,15 @@ const Register = () => {
               type="password"
               name="password"
               required
+              minLength="6"
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               placeholder="********"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              En az 6 karakter olmalıdır
+            </p>
           </div>
 
           <div>
@@ -297,6 +374,7 @@ const Register = () => {
               type="password"
               name="confirmPassword"
               required
+              minLength="6"
               value={formData.confirmPassword}
               onChange={handleChange}
               className="w-full px-4 py-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -316,7 +394,7 @@ const Register = () => {
           <p className="text-sm text-gray-600">
             Zaten hesabınız var mı?{' '}
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate(`/user-login${redirectUrl ? `?redirect=${redirectUrl}` : ''}`)}
               className="font-medium text-purple-600 hover:text-purple-700 transition-colors"
             >
               Giriş Yap
@@ -327,5 +405,3 @@ const Register = () => {
     </div>
   );
 };
-
-export { Login, Register };

@@ -611,7 +611,7 @@ const AnalyticsDashboard = () => {
                 <SmallChart
                   data={filteredData}
                   dataKey="stressScore"
-                  title="Stres Analizi"
+                  title="Stres Kontrol Analizi"
                   color="#9333EA"
                   icon={Target}
                   animate={animateCharts}
