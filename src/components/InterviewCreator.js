@@ -32,13 +32,10 @@ const InterviewCreator = () => {
   const handleSubmit = async () => {
     try {
       if (!validateForm()) return;
-
       setLoading(true);
       setError(null);
 
       const response = await axios.post(`${API_URL}/interviews`, formData);
-      
-      // Save the generated URL
       const interviewUrl = `${window.location.origin}/interview/${response.data.interview.uniqueUrl}`;
       setGeneratedUrl(interviewUrl);
       setShowSuccess(true);
@@ -128,9 +125,9 @@ const InterviewCreator = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="ml-96 p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
           Mülakat Formu Oluştur
         </h1>
 
@@ -140,9 +137,9 @@ const InterviewCreator = () => {
               onClick={() => setShowForm(!showForm)}
               className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             >
-              <PlusCircle className="h-6 w-6" />
+              <PlusCircle className="h-5 w-5 md:h-6 md:w-6" />
             </button>
-            <span className="ml-4 text-gray-700 font-semibold text-xl">
+            <span className="ml-4 text-gray-700 font-semibold text-lg md:text-xl">
               Yeni Mülakat Formu Ekle
             </span>
           </div>
@@ -155,29 +152,29 @@ const InterviewCreator = () => {
         )}
 
         {showSuccess && (
-          <div className="bg-white rounded-lg shadow-lg p-6 border border-green-200 mb-6">
+          <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 border border-green-200 mb-6">
             <div className="flex items-center mb-4">
-              <LinkIcon className="h-6 w-6 text-green-600 mr-2" />
-              <h2 className="text-2xl font-bold text-gray-800">
+              <LinkIcon className="h-5 w-5 md:h-6 md:w-6 text-green-600 mr-2" />
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                 Mülakat Başarıyla Oluşturuldu!
               </h2>
             </div>
             <p className="text-gray-600 mb-4">
               Aşağıdaki linki mülakat katılımcılarıyla paylaşabilirsiniz:
             </p>
-            <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg">
+            <div className="flex items-center space-x-2 bg-gray-50 p-3 md:p-4 rounded-lg">
               <input
                 type="text"
                 readOnly
                 value={generatedUrl}
-                className="flex-1 bg-transparent border-none focus:ring-0"
+                className="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-base"
               />
               <button
                 onClick={copyToClipboard}
                 className="p-2 text-blue-600 hover:text-blue-700 focus:outline-none"
                 title="Linki Kopyala"
               >
-                <Copy className="h-5 w-5" />
+                <Copy className="h-4 w-4 md:h-5 md:w-5" />
               </button>
             </div>
             {copied && (
@@ -185,7 +182,7 @@ const InterviewCreator = () => {
                 Link kopyalandı!
               </p>
             )}
-            <div className="mt-6 flex justify-between">
+            <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
               <button
                 onClick={() => {
                   setShowSuccess(false);
@@ -212,8 +209,8 @@ const InterviewCreator = () => {
         )}
 
         {showForm && (
-          <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 border border-gray-200">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
               MÜLAKAT FORMU BİLGİLERİ
             </h2>
             <div className="space-y-6">
@@ -225,11 +222,11 @@ const InterviewCreator = () => {
                   value={formData.mulakatAdi}
                   onChange={handleTitleChange}
                   placeholder="Mülakat başlığını giriniz..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm md:text-base"
                 />
               </div>
 
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                 <label className="text-gray-700 font-semibold">
                   Soru Sayısı (Maksimum: 5):
                 </label>
@@ -255,19 +252,19 @@ const InterviewCreator = () => {
 
               <div className="space-y-4">
                 {formData.questions.map((question, index) => (
-                  <div key={index} className="flex items-center space-x-4">
+                  <div key={index} className="flex flex-col md:flex-row gap-2 md:items-center md:gap-4">
                     <label className="w-24 font-semibold text-gray-700">{`${index + 1}. Soru`}</label>
                     <input
                       value={question.text}
                       onChange={(e) => handleQuestionChange(index, e.target.value)}
                       placeholder="Mülakat sorusunu giriniz..."
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm md:text-base"
                     />
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">
                     Duygusal Değerlendirme Oranı:
@@ -278,7 +275,7 @@ const InterviewCreator = () => {
                     </span>
                     <button
                       onClick={() => adjustRatings("duygusal")}
-                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm md:text-base"
                     >
                       +10
                     </button>
@@ -295,7 +292,7 @@ const InterviewCreator = () => {
                     </span>
                     <button
                       onClick={() => adjustRatings("teknik")}
-                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm md:text-base"
                     >
                       +10
                     </button>
@@ -307,9 +304,9 @@ const InterviewCreator = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center space-x-2 px-4 md:px-6 py-2 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                 >
-                  <Save className="h-5 w-5" />
+                  <Save className="h-4 w-4 md:h-5 md:w-5" />
                   <span>{loading ? "Kaydediliyor..." : "Mülakatı Kaydet"}</span>
                 </button>
               </div>

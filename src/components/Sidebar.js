@@ -30,18 +30,14 @@ const Sidebar = () => {
       icon: ChartBarIcon,
       path: "/pratiklerim"
     },
-    {
-      name: "Mülakatlarım",
-      icon: MessagesSquareIcon,
-      path: "/mulakatlarim"
-    },
+
     {
       name: "Pratik Oluştur",
       icon: FilePenIcon,
       path: "/pratik-olustur"
     },
     {
-      name: "Profil Ayarları",
+      name: "Nasıl Kullanılır?",
       icon: CogIcon,
       path: "/profil-ayarlari"
     }

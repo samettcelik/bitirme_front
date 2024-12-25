@@ -27,12 +27,7 @@ const CompanySideBar = () => {
       path: "/company-dashboard"
     },
     {
-      name: "Şirket Profili",
-      icon: Building2,
-      path: "/company-profile"
-    },
-    {
-      name: "Çalışanlar",
+      name: "Katılımcılar",
       icon: Users,
       path: "/company-employees"
     },
@@ -47,12 +42,7 @@ const CompanySideBar = () => {
       path: "/company-interviews"
     },
     {
-      name: "Mülakat Raporları",
-      icon: ClipboardList,
-      path: "/interview-reports"
-    },
-    {
-      name: "Ayarlar",
+      name: "Nasıl Kullanılır?",
       icon: Settings,
       path: "/company-settings"
     }

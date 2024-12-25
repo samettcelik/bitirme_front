@@ -12,6 +12,9 @@ import {
 import Sidebar from "./components/Sidebar";
 import CompanySidebar from "./components/CompanySideBar";
 import Dashboard from "./components/Dashboard";
+import CompanyDashboard from "./components/CompanyDashboard";
+import CompanyProfile from "./components/CompanyProfile";
+import CompanyEmployees from "./components/CompanyEmployees";
 import Pratiklerim from "./components/PratikPage";
 import Mulakatlarim from "./components/Mulakatlarim";
 import PratikOlustur from "./components/PratikOlustur";
@@ -21,15 +24,13 @@ import EmotionAnalysisSystem from './components/EmotionAnalysisSystem';
 import PratikDetay from './components/PratikDetay';
 import InterviewCreator from './components/InterviewCreator';
 import InterviewAnalysisSystem from './components/InterviewAnalysisSystem';
+import CompanyInterviews from './components/CompanyInterviews';
+import InterviewDetail from './components/InterviewDetail';
+import CompanyInterviewsDetails from './components/CompanyDetails';
 
 // Auth imports
 import { Login, Register } from './components/Auth';
 import { LoginSelection, CompanyLogin, CompanyRegister } from './components/LoginSelection';
-import {
-  CompanyDashboard,
-  CompanyProfile,
-  CompanyEmployees
-} from './components/CompanyComponents';
 
 // AuthCheck component for handling auth state and redirects
 const AuthCheck = ({ children }) => {
@@ -40,26 +41,26 @@ const AuthCheck = ({ children }) => {
 
   useEffect(() => {
     const publicPaths = [
-      '/login-selection', 
-      '/user-login', 
-      '/company-login', 
-      '/register', 
+      '/login-selection',
+      '/user-login',
+      '/company-login',
+      '/register',
       '/company-register',
       '/interview'
     ];
     const isPublicPath = publicPaths.some(path => location.pathname.startsWith(path));
-    
+
     // For authenticated users trying to access public paths
     if (isPublicPath && (isUserAuthenticated || isCompanyAuthenticated)) {
       if (!location.pathname.startsWith('/interview')) {
-        navigate(isUserAuthenticated ? '/dashboard' : '/company/dashboard', { replace: true });
+        navigate(isUserAuthenticated ? '/dashboard' : '/company-dashboard', { replace: true });
         return;
       }
     }
 
     // For unauthenticated users trying to access protected paths
-    if (!isPublicPath && !location.pathname.startsWith('/interview/') && 
-        !isUserAuthenticated && !isCompanyAuthenticated) {
+    if (!isPublicPath && !location.pathname.startsWith('/interview/') &&
+      !isUserAuthenticated && !isCompanyAuthenticated) {
       navigate('/login-selection', { replace: true });
       return;
     }
@@ -72,7 +73,7 @@ const AuthCheck = ({ children }) => {
 const ProtectedRoute = ({ children, requiresCompanyAuth = false }) => {
   const isUserAuthenticated = localStorage.getItem('token');
   const isCompanyAuthenticated = localStorage.getItem('companyToken');
-  
+
   if (requiresCompanyAuth && !isCompanyAuthenticated) {
     return <Navigate to="/company-login" replace />;
   }
@@ -100,7 +101,6 @@ const PublicRoute = ({ children }) => {
   const location = useLocation();
 
   if (isUserAuthenticated || isCompanyAuthenticated) {
-    // Don't redirect if it's an interview path
     if (location.pathname.startsWith('/interview/')) {
       return children;
     }
@@ -110,7 +110,7 @@ const PublicRoute = ({ children }) => {
   return children;
 };
 
-// Layout component for authenticated users
+// Layout components
 const AuthenticatedLayout = ({ children }) => (
   <div className="flex">
     <Sidebar />
@@ -118,7 +118,6 @@ const AuthenticatedLayout = ({ children }) => (
   </div>
 );
 
-// Layout component for authenticated companies
 const CompanyLayout = ({ children }) => (
   <div className="flex">
     <CompanySidebar />
@@ -236,6 +235,32 @@ const App = () => {
             <ProtectedRoute requiresCompanyAuth>
               <CompanyLayout>
                 <CompanyEmployees />
+              </CompanyLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/company-employees/interview-detail/:interviewId/:participantEmail" element={
+            <ProtectedRoute requiresCompanyAuth>
+              <CompanyLayout>
+                <InterviewDetail />
+              </CompanyLayout>
+            </ProtectedRoute>
+          } />
+
+
+
+          <Route path="/company-interviews" element={
+            <ProtectedRoute requiresCompanyAuth>
+              <CompanyLayout>
+                <CompanyInterviews />
+              </CompanyLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/company-interviews/:id" element={
+            <ProtectedRoute requiresCompanyAuth>
+              <CompanyLayout>
+                <CompanyInterviewsDetails />
               </CompanyLayout>
             </ProtectedRoute>
           } />
