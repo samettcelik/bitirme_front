@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { UserPlus, Video, Award, FileText, BarChart2, Trophy } from 'lucide-react';
+import { Building, Video, UserPlus, FileText, BarChart2, Trophy } from 'lucide-react';
 
-const HowToUse = () => {
+const CompanyOnboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showTrophy, setShowTrophy] = useState(false);
   const [showShine, setShowShine] = useState(false);
@@ -10,9 +10,9 @@ const HowToUse = () => {
   
   const steps = [
     {
-      icon: UserPlus,
-      title: "Kayıt ve Giriş",
-      description: "Sisteme kayıt olun ve güvenli bir şekilde giriş yapın.",
+      icon: Building,
+      title: "Kurumsal Kayıt",
+      description: "Şirketiniz için kurumsal hesap oluşturun ve güvenli bir şekilde giriş yapın.",
       color: "text-blue-600",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
@@ -20,17 +20,17 @@ const HowToUse = () => {
     },
     {
       icon: Video,
-      title: "Pratik Oluşturma",
-      description: "Yeni bir mülakat pratiği oluşturun ve video mülakat sistemine giriş yapın.",
+      title: "Mülakat Hazırlama",
+      description: "Mülakat içeriğini hazırlayın ve katılımcılar için özel bir link oluşturun.",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200",
       shadowColor: "shadow-purple-100"
     },
     {
-      icon: Award,
-      title: "AI Analizi",
-      description: "Cevaplarınız yapay zeka tarafından otomatik olarak analiz edilir.",
+      icon: UserPlus,
+      title: "Katılımcı Davet",
+      description: "Oluşturulan linki katılımcılarla paylaşın ve mülakatların tamamlanmasını bekleyin.",
       color: "text-emerald-600",
       bgColor: "bg-emerald-50",
       borderColor: "border-emerald-200",
@@ -38,8 +38,8 @@ const HowToUse = () => {
     },
     {
       icon: FileText,
-      title: "Detaylı Raporlar",
-      description: "Pratik detaylarından duygu durum analizi ve bilgi yeterlilik raporlarınızı inceleyin.",
+      title: "Mülakat Raporları",
+      description: "Her katılımcı için detaylı mülakat raporlarını inceleyin.",
       color: "text-amber-600",
       bgColor: "bg-amber-50",
       borderColor: "border-amber-200",
@@ -47,8 +47,8 @@ const HowToUse = () => {
     },
     {
       icon: BarChart2,
-      title: "Gelişim Takibi",
-      description: "Dashboard üzerinden tüm pratiklerinizin gelişimini izleyin.",
+      title: "Performans Analizi",
+      description: "Dashboard üzerinden katılımcıların stres, uyum skorları ve bilgi yeterliliklerini karşılaştırın.",
       color: "text-indigo-600",
       bgColor: "bg-indigo-50",
       borderColor: "border-indigo-200",
@@ -190,7 +190,7 @@ const HowToUse = () => {
         {/* Progress Bar */}
         <div className="absolute left-8 top-0 bottom-0 w-3 bg-gray-50 rounded-full shadow-inner" />
         <div 
-          className="absolute left-8 top-0 w-3 bg-gradient-to-b from-purple-500 to-purple-600 rounded-full transition-all duration-700 ease-in-out"
+          className="absolute left-8 top-0 w-3 bg-gradient-to-b from-blue-700 to-blue-900 rounded-full transition-all duration-700 ease-in-out"
           style={{ height: `${(currentStep / steps.length) * 100}%` }}
         />
 
@@ -216,7 +216,7 @@ const HowToUse = () => {
                 flex items-center justify-center 
                 transform transition-all duration-300
                 ${index <= currentStep ? `${step.bgColor} border-2 ${step.borderColor}` : 'bg-gray-50 border-2 border-gray-200'}
-                ${index === currentStep ? 'ring-4 ring-purple-100 scale-110' : ''}
+                ${index === currentStep ? 'ring-4 ring-blue-100 scale-110' : ''}
                 shadow-lg ${index <= currentStep ? step.shadowColor : 'shadow-gray-100'}
               `}>
                 <step.icon className={`w-6 h-6 ${
@@ -251,23 +251,22 @@ const HowToUse = () => {
           style={{ zIndex: 50 }}
         >
           <div className="trophy-card inline-flex items-center space-x-4 p-6 rounded-2xl relative overflow-hidden">
-            <div className="trophy-container bg-yellow-50 p-3 rounded-xl relative">
-              <Trophy className="w-14 h-14 text-yellow-500 animate-bounce" />
+            <div className="trophy-container bg-blue-50 p-3 rounded-xl relative">
+              <Trophy className="w-14 h-14 text-blue-500 animate-bounce" />
               <div className="sparkle"></div>
               <div className="sparkle"></div>
               <div className="sparkle"></div>
               <div className="sparkle"></div>
             </div>
             <div className="text-left relative">
-              <h3 className={`text-xl font-bold text-purple-800 mb-1 ${goldFlash ? 'animate-[goldFlash_2s_ease-in-out_forwards]' : ''}`}>
+              <h3 className={`text-xl font-bold text-blue-800 mb-1 ${goldFlash ? 'animate-[goldFlash_2s_ease-in-out_forwards]' : ''}`}>
                 Tebrikler!
               </h3>
               <p className="text-sm text-gray-600">
-                Artık sistemi kullanmaya hazırsınız.
+                Artık şirketiniz için mülakat sürecini yönetmeye hazırsınız.
               </p>
-              {/* Additional decorative elements */}
-              <div className="absolute -top-6 -right-6 w-12 h-12 rotate-45 bg-gradient-to-r from-yellow-200 to-transparent opacity-50"></div>
-              <div className="absolute -bottom-6 -left-6 w-12 h-12 -rotate-45 bg-gradient-to-r from-purple-200 to-transparent opacity-50"></div>
+              <div className="absolute -top-6 -right-6 w-12 h-12 rotate-45 bg-gradient-to-r from-blue-200 to-transparent opacity-50"></div>
+              <div className="absolute -bottom-6 -left-6 w-12 h-12 -rotate-45 bg-gradient-to-r from-blue-200 to-transparent opacity-50"></div>
             </div>
           </div>
         </div>
@@ -276,4 +275,4 @@ const HowToUse = () => {
   );
 };
 
-export default HowToUse;
+export default CompanyOnboarding;

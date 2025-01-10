@@ -1,14 +1,14 @@
-// CompanyInterviews.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Search, FileSpreadsheet, Users, Calendar } from 'lucide-react';
+import { Search, FileSpreadsheet, Users, Calendar, ArrowUpDown } from 'lucide-react';
 
 const CompanyInterviews = () => {
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const [sortDirection, setSortDirection] = useState('desc'); // 'asc' or 'desc'
 
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -71,6 +71,16 @@ const CompanyInterviews = () => {
     interview.mulakatAdi.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sortedInterviews = [...filteredInterviews].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
+  });
+
+  const toggleSort = () => {
+    setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc');
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('tr-TR', {
       year: 'numeric',
@@ -107,15 +117,24 @@ const CompanyInterviews = () => {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Mülakat ara..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Mülakat ara..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            onClick={toggleSort}
+            className="flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+          >
+            <ArrowUpDown className="w-4 h-4" />
+            {sortDirection === 'desc' ? 'Yeniden Eskiye' : 'Eskiden Yeniye'}
+          </button>
         </div>
 
         <div className="bg-blue-50 px-4 py-2 rounded-lg">
@@ -126,7 +145,7 @@ const CompanyInterviews = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredInterviews.map((interview) => (
+        {sortedInterviews.map((interview) => (
           <Link
             key={interview.id}
             to={`/company-interviews/${interview.id}`}
@@ -178,7 +197,7 @@ const CompanyInterviews = () => {
         ))}
       </div>
 
-      {filteredInterviews.length === 0 && (
+      {sortedInterviews.length === 0 && (
         <div className="text-center py-12">
           <div className="text-gray-400 mb-2">
             <FileSpreadsheet className="w-12 h-12 mx-auto" />

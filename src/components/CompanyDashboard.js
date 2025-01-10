@@ -161,16 +161,14 @@ const Dashboard = ({ isSidebarExpanded }) => {
   const totalPages = Math.ceil(filteredSummaryData.length / interviewsPerPage);
 
   const calculateAverages = () => {
+    const selectedInterviews = filteredChartData;
     let totalScores = { emotion: 0, technical: 0, final: 0 };
-    let count = 0;
+    let count = selectedInterviews.length;
 
-    Object.values(participantDetails).forEach(details => {
-      if (details) {
-        totalScores.emotion += details.emotionScore || 0;
-        totalScores.technical += details.knowledgeScore || 0;
-        totalScores.final += details.finalScore || 0;
-        count++;
-      }
+    selectedInterviews.forEach(interview => {
+      totalScores.emotion += interview.stresSkoru || 0;
+      totalScores.technical += interview.teknikSkoru || 0;
+      totalScores.final += interview.finalSkor || 0;
     });
 
     return {

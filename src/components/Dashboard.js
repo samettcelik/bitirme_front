@@ -191,36 +191,22 @@ const AnalyticsDashboard = () => {
   }, []);
 
 
-  /**
-   * Zaman aralığı filtreleme
-   */
   const filteredData = useMemo(() => {
-    const now = Date.now();
-    const filters = {
-      day: now - 86400000,        // 1 gün
-      week: now - 604800000,      // 1 hafta
-      month: now - 2592000000,    // 1 ay
-      year: now - 31536000000,    // 1 yıl
-      all: 0
-    };
-    // Önce zaman filtresini uygula
-    const timeFiltered = practiceData.filter(item => item.timestamp >= filters[selectedTimeRange]);
-
-    // Sonra seçilen zaman aralığına göre son N pratiği al
+    // Zaman filtresi kaldırıldı, sadece son N pratiği alacağız
     const limits = {
-      day: 2,    // Son 2 pratik
-      week: 3,   // Son 3 pratik
-      month: 4,  // Son 4 pratik
-      year: 5,   // Son 5 pratik
-      all: 6     // Son 6 pratik
+      'day': 2,    // Son 2 pratik
+      'week': 3,   // Son 3 pratik
+      'month': 4,  // Son 4 pratik
+      'year': 5,   // Son 5 pratik
+      'all': 6     // Son 6 pratik
     };
-
-    return timeFiltered.slice(-limits[selectedTimeRange]);
+  
+    // Seçilen zaman aralığına göre son N pratiği al
+    const limit = limits[selectedTimeRange];
+    return practiceData.slice(-limit);
   }, [practiceData, selectedTimeRange]);
-
-  /**
-   * Üst kısımdaki zaman aralığı seçici buton grubu
-   */
+  
+  // Zaman aralığı seçici butonlarını da günceleyelim
   const TimeRangeSelector = () => (
     <div className="flex space-x-2 mb-6">
       {[
@@ -233,10 +219,11 @@ const AnalyticsDashboard = () => {
         <button
           key={range.key}
           onClick={() => setSelectedTimeRange(range.key)}
-          className={`px-4 py-2 rounded-lg transition-colors duration-200 ${selectedTimeRange === range.key
+          className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
+            selectedTimeRange === range.key
               ? 'bg-indigo-600 text-white'
               : 'bg-white text-gray-600 hover:bg-gray-50'
-            }`}
+          }`}
         >
           {range.label}
         </button>
@@ -276,7 +263,7 @@ const AnalyticsDashboard = () => {
               <YAxis
                 stroke="#666"
                 fontSize={9}
-                domain={[0, 100]}
+                domain={[0, 50]}
                 tickLine={false}
                 axisLine={false}
                 tickCount={5}
@@ -530,7 +517,7 @@ const AnalyticsDashboard = () => {
             <button
               className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg 
                 hover:bg-indigo-700 transition-colors duration-200"
-              onClick={() => window.location.href = '/new-practice'}
+              onClick={() => window.location.href = '/pratik-olustur'}
             >
               <span>Hadi Pratik Yapalım</span>
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -558,7 +545,7 @@ const AnalyticsDashboard = () => {
             <button
               className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg 
                 hover:bg-purple-700 transition-colors duration-200"
-              onClick={() => window.location.href = '/practice-history'}
+              onClick={() => window.location.href = '/pratiklerim'}
             >
               <span>Pratikleri İncele</span>
               <History className="ml-2 h-4 w-4" />

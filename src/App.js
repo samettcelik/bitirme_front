@@ -5,7 +5,8 @@ import {
   Route,
   Navigate,
   useLocation,
-  useNavigate
+  useNavigate,
+  Outlet
 } from "react-router-dom";
 
 // Component imports
@@ -27,19 +28,24 @@ import InterviewAnalysisSystem from './components/InterviewAnalysisSystem';
 import CompanyInterviews from './components/CompanyInterviews';
 import InterviewDetail from './components/InterviewDetail';
 import CompanyInterviewsDetails from './components/CompanyDetails';
+import LandingPage from './components/LandingPage';
+import CompanyOnboarding from './components/CompanyOnboarding';
+
 
 // Auth imports
 import { Login, Register } from './components/Auth';
 import { LoginSelection, CompanyLogin, CompanyRegister } from './components/LoginSelection';
 
 // AuthCheck component for handling auth state and redirects
-const AuthCheck = ({ children }) => {
+const AuthCheck = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isUserAuthenticated = localStorage.getItem('token');
   const isCompanyAuthenticated = localStorage.getItem('companyToken');
 
   useEffect(() => {
+    if (location.pathname === '/') return; // Landing Page kontrolünü devre dışı bırak
+
     const publicPaths = [
       '/login-selection',
       '/user-login',
@@ -66,7 +72,7 @@ const AuthCheck = ({ children }) => {
     }
   }, [isUserAuthenticated, isCompanyAuthenticated, location, navigate]);
 
-  return children;
+  return <Outlet />;
 };
 
 // Protected Route component
@@ -129,10 +135,12 @@ const CompanyLayout = ({ children }) => (
 const App = () => {
   return (
     <Router>
-      <AuthCheck>
-        <Routes>
-          {/* Initial and Auth Routes */}
-          <Route path="/" element={<Navigate to="/login-selection" replace />} />
+      <Routes>
+        {/* Landing Page Route - AuthCheck dışında */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Diğer tüm routelar AuthCheck içinde */}
+        <Route element={<AuthCheck />}>
           <Route path="/login-selection" element={<PublicRoute><LoginSelection /></PublicRoute>} />
           <Route path="/user-login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
@@ -247,8 +255,6 @@ const App = () => {
             </ProtectedRoute>
           } />
 
-
-
           <Route path="/company-interviews" element={
             <ProtectedRoute requiresCompanyAuth>
               <CompanyLayout>
@@ -273,10 +279,18 @@ const App = () => {
             </ProtectedRoute>
           } />
 
+          <Route path="/company-settings" element={
+            <ProtectedRoute requiresCompanyAuth>
+              <CompanyLayout>
+                <CompanyOnboarding />
+              </CompanyLayout>
+            </ProtectedRoute>
+          } />
+
           {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/login-selection" replace />} />
-        </Routes>
-      </AuthCheck>
+        </Route>
+      </Routes>
     </Router>
   );
 };

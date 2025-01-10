@@ -223,10 +223,6 @@ const InterviewDetail = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="bg-orange-50 rounded p-3 mt-2">
-                        <p className="text-sm text-gray-600">Detaylı Rapor</p>
-                        <p className="mt-1">{response.knowledgeAnalysis?.reportText || 'Rapor bulunmuyor'}</p>
-                      </div>
                     </div>
                   </div>
                 </>

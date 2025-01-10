@@ -23,7 +23,7 @@ const Sidebar = () => {
     {
       name: "Ev",
       icon: HomeIcon,
-      path: "/"
+      path: "/dashboard"
     },
     {
       name: "Pratiklerim",
